@@ -65,7 +65,7 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
                     <div class="app-brand demo">
                         <a href="index.html" class="app-brand-link">
 
-                            <span class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize">TooTH Care</span>
+                            <span class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize">Tooth Care</span>  <img data-v-2495b3ee="" srcset="https://img.icons8.com/?size=80&amp;id=O8yDtSGgh4H4&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=O8yDtSGgh4H4&amp;format=png 2x" width="40" height="40" alt="Dental Care icon">
                         </a>
 
                         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -86,18 +86,25 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
 
                         <li class="menu-item <?= $currentFilename === "appointment_booking.php" ? 'active' : '' ?>">
                             <a href="<?= url('views/admin/appointment_booking.php') ?>" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-run"></i>
+                                <i class="menu-icon tf-icons bx bx-edit-alt"></i>
                                 <div data-i18n="Analytics">Appointment Booking</div>
                             </a>
                         </li>
 
                         <li class="menu-item <?= $currentFilename === "users.php" ? 'active' : '' ?>">
                             <a href="<?= url('views/admin/users.php') ?>" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                                <i class="menu-icon tf-icons bx bx-user"></i>
                                 <div data-i18n="Analytics">User</div>
                             </a>
                         </li>
+                        
 
+                        <li class="menu-item <?= $currentFilename === "doctors.php" ? 'active' : '' ?>">
+                            <a href="<?= url('views/admin/doctors.php') ?>" class="menu-link">
+                            <img data-v-2495b3ee="" srcset="https://img.icons8.com/?size=80&amp;id=lvdJwMfBsMd9&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=lvdJwMfBsMd9&amp;format=png 2x" width="25" height="25" alt="Stethoscope icon" i class="menu-icon"></i>
+                            <div data-i18n="Analytics">Doctors</div>
+                            </a>
+                        </li>
 
                     </ul>
                 </aside>
