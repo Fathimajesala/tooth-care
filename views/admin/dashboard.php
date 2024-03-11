@@ -10,13 +10,8 @@ require_once('../layouts/header.php');
         <div class="d-flex align-items-end row">
           <div class="col-sm-7">
             <div class="card-body">
-              <h5 class="card-title text-primary">Congratulations Jesala! <img data-v-2495b3ee="" srcset="https://img.icons8.com/?size=80&amp;id=XhCDqjapCbBj&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=XhCDqjapCbBj&amp;format=png 2x" width="35" height="35" alt="Bouquet icon"></h5>
-              <p class="mb-4">
-                You have done <span class="fw-bold">72%</span> more sales today. Check your new badge in
-                your profile.
-              </p>
-
-              <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
+              <h5 class="card-title text-primary">Congratulations <?= $username ?>! <img data-v-2495b3ee="" srcset="https://img.icons8.com/?size=80&amp;id=XhCDqjapCbBj&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=XhCDqjapCbBj&amp;format=png 2x" width="35" height="35" alt="Bouquet icon"></h5>
+              <!-- <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a> -->
             </div>
           </div>
           <div class="col-sm-5 text-center text-sm-left">
@@ -27,7 +22,7 @@ require_once('../layouts/header.php');
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-4 order-1">
+    <!-- <div class="col-lg-4 col-md-4 order-1">
       <div class="row">
         <div class="col-lg-6 col-md-12 col-6 mb-4">
           <div class="card">
@@ -76,7 +71,7 @@ require_once('../layouts/header.php');
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 <!-- / Content -->

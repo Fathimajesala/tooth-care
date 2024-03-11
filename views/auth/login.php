@@ -49,7 +49,7 @@ $error = $sm->getAttribute("error");
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
                             <a href="#" class="app-brand-link gap-2">
-                                <span class="app-brand-text demo text-body fw-bolder" style=" text-transform: capitalize; "> Tooth Care</span>
+                                <span class="app-brand-text demo text-body fw-bolder" style=" text-transform: capitalize; "> Tooth Care </span>
                             </a>
                         </div>
                         <!-- /Logo -->

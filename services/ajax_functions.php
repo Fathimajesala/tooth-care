@@ -1,10 +1,11 @@
 <?php
 require_once '../config.php';
- require_once '../helpers/AppManager.php';
-// require_once '../models/Appointment.php';
-// require_once '../models/Payment.php';
-// require_once '../models/Treatment.php';
+require_once '../helpers/AppManager.php';
+require_once '../models/Appointment.php';
+require_once '../models/Payment.php';
+require_once '../models/Treatment.php';
 require_once '../models/User.php';
+require_once '../models/Doctor.php';
 
 //create user
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_user') {
@@ -15,12 +16,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $password = $_POST['password'];
         $permission = $_POST['permission'];
 
+        $doctor_name = $_POST['doctor_name'] ?? null;
+        $about_doctor = $_POST['about_doctor'] ?? null;
+
         $userModel = new User();
         $created =  $userModel->createUser($username, $password, $permission, $email);
+
         if ($created) {
+
+            if ($permission == 'doctor') {
+                $user_id = $userModel->getLastInsertedUserId();
+                $doctorModel = new Doctor();
+                $doctorCreated =  $doctorModel->createDoctor($doctor_name,  $about_doctor, $user_id);
+            }
+
             echo json_encode(['success' => true, 'message' => "User created successfully!"]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to create user. May be user already exist!']);
+        }
+    } catch (PDOException $e) {
+        // Handle database connection errors
+        echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    }
+    exit;
+}
+
+//Get user by id
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user_id']) && isset($_GET['action']) &&  $_GET['action'] == 'get_user') {
+
+    try {
+        $user_id = $_GET['user_id'];
+        $userModel = new User();
+        $user = $userModel->getById($user_id);
+        if ($user) {
+            echo json_encode(['success' => true, 'message' => "User created successfully!", 'data' => $user]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to create user. May be user already exist!']);
+        }
+    } catch (PDOException $e) {
+        // Handle database connection errors
+        echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    }
+    exit;
+}
+
+//Delete by user id
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['user_id']) && isset($_GET['action']) &&  $_GET['action'] == 'delete_user') {
+
+    try {
+        $user_id = $_GET['user_id'];
+        $userModel = new User();
+        $deleted = $userModel->deleteUser($user_id);
+
+        if ($deleted) {
+            echo json_encode(['success' => true, 'message' => "User deleted successfully!", 'data' => $deleted]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to delete user.']);
+        }
+    } catch (PDOException $e) {
+        // Handle database connection errors
+        echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    }
+    exit;
+}
+
+//update user
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_user') {
+    try {
+        $username = $_POST['username'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $permission = $_POST['permission'];
+        $is_active = $_POST['is_active'] == 1 ? 1 : 0;
+        $id = $_POST['id'];
+
+        // Validate inputs
+        if (empty($username) || empty($email)) {
+            echo json_encode(['success' => false, 'message' => 'Required fields are missing!']);
+            exit;
+        }
+
+        // Validate email format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['success' => false, 'message' => 'Invalid email address']);
+            exit;
+        }
+
+        $userModel = new User();
+        $updated =  $userModel->updateUser($id, $username, $password, $permission, $email, $is_active);
+        if ($updated) {
+            echo json_encode(['success' => true, 'message' => "User updated successfully!"]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to update user. May be user already exist!']);
         }
     } catch (PDOException $e) {
         // Handle database connection errors
@@ -33,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'book_appointment') {
 
     try {
-        // $appointment = new Appointment();
+        $appointment = new Appointment();
 
         if (isset($_POST['id'])) {
             $appointment = $appointment->getById($_POST['id']);
@@ -52,12 +139,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $appointment->appointment_date = $_POST['appointment_date'] ?? null;
 
         $insertedId = $appointment->save();
-        // $treatment = new Treatment();
+        $treatment = new Treatment();
         $appointmentTreatment = $treatment->getById($appointment->treatment_id);
 
         if (isset($insertedId) && isset($appointmentTreatment)) {
 
-            // $payment = new Payment();
+            $payment = new Payment();
             $payment->appointment_id = $insertedId;
             $payment->registration_fee = $appointmentTreatment['registration_fee'] ?? 0;
             $payment->registration_fee_paid = 1;
@@ -87,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $treatment_fee_paid = $_POST['treatment_fee_paid'] ? 1 : 0;
         $quantity = $_POST['quantity'] ?? 1;
 
-        // $payment = new Payment();
+        $payment = new Payment();
         $paymentData = $payment->getById($payment_id);
         if (isset($paymentData)) {
             $payment->id = $payment_id;
@@ -121,7 +208,7 @@ if (
         $email = $_POST['email'] ?? "";
         $nic = $_POST['nic'] ?? "";
 
-        // $appointment = new Appointment();
+        $appointment = new Appointment();
         $appointmentData = $appointment->getById($appointment_id);
 
         if (!empty($appointmentData)) {
@@ -146,3 +233,5 @@ if (
     }
     exit;
 }
+
+dd('Access denied..!');

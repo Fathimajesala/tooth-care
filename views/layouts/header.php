@@ -3,6 +3,15 @@
 include __DIR__ . '/../../config.php';
 include __DIR__ . '/../../helpers/AppManager.php';
 
+$sm = AppManager::getSM();
+$username = $sm->getAttribute("username");
+$permission = $sm->getAttribute("permission");
+$user_id = $sm->getAttribute("userId");
+
+if (!isset($username)) {
+    dd('Permission denied!');
+}
+
 $currentUrl = $_SERVER['SCRIPT_NAME'];
 
 // Extract the last filename from the URL
@@ -64,8 +73,8 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
                 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                     <div class="app-brand demo">
                         <a href="index.html" class="app-brand-link">
-
-                            <span class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize">Tooth Care</span>  <img data-v-2495b3ee="" srcset="https://img.icons8.com/?size=80&amp;id=O8yDtSGgh4H4&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=O8yDtSGgh4H4&amp;format=png 2x" width="40" height="40" alt="Dental Care icon">
+                        <img data-v-2495b3ee="" srcset="https://img.icons8.com/?size=80&amp;id=O8yDtSGgh4H4&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=O8yDtSGgh4H4&amp;format=png 2x" width="40" height="40" alt="Dental Care icon">
+                            <span class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize">TooTH Care</span>
                         </a>
 
                         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -84,28 +93,61 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
                             </a>
                         </li>
 
-                        <li class="menu-item <?= $currentFilename === "appointment_booking.php" ? 'active' : '' ?>">
-                            <a href="<?= url('views/admin/appointment_booking.php') ?>" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-edit-alt"></i>
-                                <div data-i18n="Analytics">Appointment Booking</div>
+                        <?php if ($permission == 'operator') : ?>
+                            <li class="menu-item <?= $currentFilename === "available_channelings.php" ? 'active' : '' ?>">
+                                <a href="<?= url('views/admin/available_channelings.php') ?>" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                                    <div data-i18n="Analytics">Appointment Booking</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <li class="menu-item <?= $currentFilename === "appointments.php" ? 'active' : '' ?>">
+                            <a href="<?= url('views/admin/appointments.php') ?>" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-collection"></i>
+                                <div data-i18n="Analytics">Appointments</div>
                             </a>
                         </li>
 
-                        <li class="menu-item <?= $currentFilename === "users.php" ? 'active' : '' ?>">
-                            <a href="<?= url('views/admin/users.php') ?>" class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-user"></i>
-                                <div data-i18n="Analytics">User</div>
-                            </a>
-                        </li>
-                        
+                        <?php if ($permission == 'operator') : ?>
+                            <li class="menu-item <?= $currentFilename === "doctors.php" ? 'active' : '' ?>">
+                                <a href="<?= url('views/admin/doctors.php') ?>" class="menu-link">
+                                <img data-v-2495b3ee="" srcset="https://img.icons8.com/?size=80&amp;id=lvdJwMfBsMd9&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=lvdJwMfBsMd9&amp;format=png 2x" width="25" height="25" alt="Stethoscope icon" i class="menu-icon"></i>
+                                    <div data-i18n="Analytics">Doctors</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
 
-                        <li class="menu-item <?= $currentFilename === "doctors.php" ? 'active' : '' ?>">
-                            <a href="<?= url('views/admin/doctors.php') ?>" class="menu-link">
-                            <img data-v-2495b3ee="" srcset="https://img.icons8.com/?size=80&amp;id=lvdJwMfBsMd9&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=lvdJwMfBsMd9&amp;format=png 2x" width="25" height="25" alt="Stethoscope icon" i class="menu-icon"></i>
-                            <div data-i18n="Analytics">Doctors</div>
-                            </a>
-                        </li>
+                        <?php if ($permission == 'operator') : ?>
+                            <li class="menu-item <?= $currentFilename === "doctor_availability.php" ? 'active' : '' ?>">
+                                <a href="<?= url('views/admin/doctor_availability.php') ?>" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-time-five"></i>
+                                    <div data-i18n="Analytics">Doctor Availability</div>
+                                </a>
+                            </li>
 
+
+                            <li class="menu-item <?= $currentFilename === "payments.php" ? 'active' : '' ?>">
+                                <a href="<?= url('views/admin/payments.php') ?>" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-wallet"></i>
+                                    <div data-i18n="Analytics">Payments</div>
+                                </a>
+                            </li>
+
+                            <li class="menu-item <?= $currentFilename === "treatments.php" ? 'active' : '' ?>">
+                                <a href="<?= url('views/admin/treatments.php') ?>" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-plus-medical"></i>
+                                    <div data-i18n="Analytics">Treatments</div>
+                                </a>
+                            </li>
+
+                            <li class="menu-item <?= $currentFilename === "users.php" ? 'active' : '' ?>">
+                                <a href="<?= url('views/admin/users.php') ?>" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-user"></i>
+                                    <div data-i18n="Analytics">User</div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                     </ul>
                 </aside>
                 <!-- / Menu -->
@@ -148,8 +190,10 @@ $currentFilename = basename($currentUrl);  // e.g., "dashboard.php"
                                                         </div>
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <span class="fw-semibold d-block">John Doe</span>
-                                                        <small class="text-muted">Admin</small>
+                                                        <span class="fw-semibold d-block"><?= $username ?></span>
+                                                        <small class="text-muted text-capitalize">
+                                                            <?= $permission ?>
+                                                        </small>
                                                     </div>
                                                 </div>
                                             </a>
